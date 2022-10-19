@@ -210,7 +210,9 @@ class PipelinedRpcServicer(pipelined_pb2_grpc.PipelinedServicer):
             req for req in request.requests
             if req.request_origin.type == RequestOriginType.GY
         ]
-        enforcement_res = self._enforcer_app.handle_restart(gx_reqs)
+        enforcement_res = []
+        if self._service_config['redis_enabled'] == False:
+            enforcement_res = self._enforcer_app.handle_restart(gx_reqs)
         # TODO check these results and aggregate
         self._gy_app.handle_restart(gy_reqs)
         self._enforcement_stats.handle_restart(gx_reqs)

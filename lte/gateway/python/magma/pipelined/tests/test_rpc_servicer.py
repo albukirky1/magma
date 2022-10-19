@@ -92,7 +92,8 @@ class RPCServicerTest(unittest.TestCase):
         setup_req = SetupPolicyRequest(requests=[gx_req1, gx_req2, gy_req])
 
         self.pipelined_srv.SetupPolicyFlows(setup_req, MagicMock())
-        self._enforcer_app.handle_restart.assert_called_with([gx_req1, gx_req2])
+        if self._service_config['redis_enabled'] == False:
+            self._enforcer_app.handle_restart.assert_called_with([gx_req1, gx_req2])
         self._enforcement_stats.handle_restart.assert_called_with([gx_req1, gx_req2])
         self._gy_app.handle_restart.assert_called_with([gy_req])
 
