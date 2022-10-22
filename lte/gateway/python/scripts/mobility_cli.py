@@ -34,7 +34,7 @@ from orc8r.protos.common_pb2 import Void
 @grpc_wrapper
 def add_ip_block_handler(client, args):
     try:
-        ipblock = ipaddress.ip_network(args.ipblock)
+        ipblock = ipaddress.ip_network(args.ipblock, strict=False)
     except ValueError:
         print("Error: invalid IP block format: %s" % args.ipblock)
         return
